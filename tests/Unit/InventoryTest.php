@@ -18,7 +18,7 @@ class InventoryTest extends TestCase
 		parent::setUp();
 
 		$this->repository = new TransactionRepository();
-		$this->counter    = new Counter();
+		$this->counter    = new Counter($this->repository);
 	}
 
 	public function test_can_calculate_cost_price() {
