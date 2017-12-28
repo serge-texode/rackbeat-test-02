@@ -24,6 +24,12 @@ class TransactionRepository
 		return $this->transactions;
 	}
 
+	/**
+	 * @param int $quantity
+	 * @param int $costPrice
+	 *
+	 * @return Transaction
+	 */
 	public function create( $quantity = 1, $costPrice = 100 ) {
 		$transaction = new Transaction( [ 'id' => $this->transactions->last()->id ?? 1, 'quantity' => $quantity, 'created_at' => now(), 'cost_price' => $costPrice ] );
 
