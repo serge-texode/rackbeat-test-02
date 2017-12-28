@@ -24,7 +24,7 @@ class TransactionRepository
 	 * @return Transaction
 	 */
 	public function create( $quantity = 1, $costPrice = 100 ) {
-		$transaction = new Transaction( [ 'id' => $this->transactions->last()->id ?? 1, 'quantity' => $quantity, 'created_at' => now(), 'cost_price' => $costPrice ] );
+		$transaction = new Transaction( [ 'id' => $this->transactions->last()->id ?? 1, 'quantity' => $quantity, 'created_at' => now(), 'unit_cost_price' => $costPrice ] );
 
 		$this->transactions->push( $transaction );
 
