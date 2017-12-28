@@ -33,6 +33,9 @@ class InventoryTest extends TestCase
 		$this->repository->create( -5, 10.0 );
 
 		$this->assertEquals( 15.0, $this->counter->calculateCostPrice( -10 ) );
+
+		$this->repository->create( -10, 15.0 );
+
 		$this->assertEquals( 20.0, $this->counter->calculateCostPrice( -5 ) );
 	}
 
