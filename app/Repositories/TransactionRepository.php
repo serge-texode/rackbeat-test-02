@@ -12,10 +12,10 @@ class TransactionRepository
 	public function __construct() {
 		$this->transactions = new Collection();
 
-		$this->transactions->push( new Transaction( [ 'quantity' => 10 ] ) ); // Purchase
-		$this->transactions->push( new Transaction( [ 'quantity' => 20 ] ) ); // Purchase
-		$this->transactions->push( new Transaction( [ 'quantity' => -20 ] ) ); // Sale
-		$this->transactions->push( new Transaction( [ 'quantity' => 10 ] ) ); // Purchase
+		$this->create( 10, 10.0 ); // Purchase
+		$this->create( 20, 8.0 ); // Purchase
+		$this->create( -20, null ); // Sale
+		$this->create( -5, null ); // Sale
 	}
 
 	public function get() {
@@ -23,7 +23,7 @@ class TransactionRepository
 	}
 
 	public function create( $quantity = 1, $costPrice = 100 ) {
-		$transaction = new Transaction( [ 'id' => $this->transactions->last()->id, 'quantity' => $quantity, 'created_at' => now(), 'cost_price' => $costPrice ] );
+		$transaction = new Transaction( [ 'id' => $this->transactions->last()->id ?? 1, 'quantity' => $quantity, 'created_at' => now(), 'cost_price' => $costPrice ] );
 
 		$this->transactions->push( $transaction );
 

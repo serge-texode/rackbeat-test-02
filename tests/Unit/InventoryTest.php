@@ -15,7 +15,7 @@ class InventoryTest extends TestCase
 	}
 
 	public function test_can_calculate_cost_price() {
-		// todo assert that positive Transactions can calculate the cost price.
+		// todo assert that negative Transactions can calculate the unit cost price.
 	}
 
 	public function test_can_calculate_total_stock_count() {
