@@ -15,12 +15,10 @@ class Counter
 	}
 
 	/**
-	 * @param Collection|Transaction[] $items
-	 *
 	 * @return int
 	 */
-	public function countTotalQuantity( $items ) {
-		// todo return an integer representing the amount of items (quantity) left from the Collection $items.
+	public function countTotalQuantity() {
+		// todo return an integer representing the amount of items (quantity) left from the Repository
 		return 0;
 	}
 
