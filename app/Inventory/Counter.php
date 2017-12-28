@@ -20,6 +20,11 @@ class Counter
 		return 0;
 	}
 
+	/**
+	 * @param int $quantity
+	 *
+	 * @return double
+	 */
 	public function calculateCostPrice( $quantity = -10 ) {
 		// todo return an double representing the cost price for $quantity.
 		return 0.0;

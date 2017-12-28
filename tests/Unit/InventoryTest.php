@@ -39,8 +39,7 @@ class InventoryTest extends TestCase
 	public function test_can_calculate_total_stock_count() {
 		$this->repository->create( 10, 10.0 );
 		$this->repository->create( 20, 8.0 );
-		$this->repository->create( -20, null );
-		$this->repository->create( -5, null );
+		$this->repository->create( -10, null );
 
 		$this->assertEquals( 20, $this->counter->countTotalQuantity( $this->repository->get() ) );
 
