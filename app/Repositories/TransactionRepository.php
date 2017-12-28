@@ -11,7 +11,9 @@ class TransactionRepository
 
 	public function __construct() {
 		$this->transactions = new Collection();
+	}
 
+	public function seed() {
 		$this->create( 10, 10.0 ); // Purchase
 		$this->create( 20, 8.0 ); // Purchase
 		$this->create( -20, null ); // Sale
