@@ -11,27 +11,41 @@ class InventoryTest extends TestCase
 	/** @var TransactionRepository */
 	protected $repository;
 
+	/** @var Counter */
+	protected $counter;
+
 	public function setUp() {
 		parent::setUp();
 
 		$this->repository = new TransactionRepository();
+		$this->counter    = new Counter();
 	}
 
 	public function test_can_calculate_cost_price() {
 		$this->repository->create( 10, 10.0 );
-		$saleTransaction = $this->repository->create( -10, null );
 
-		$this->assertEquals( 10.0, $saleTransaction->unit_cost_price );
+		$this->assertEquals( 10.0, $this->counter->calculateCostPrice( -10 ) );
+	}
+
+	public function test_can_calculate_cost_price_with_multiple_purchases_and_sales() {
+		$this->repository->create( 10, 10.0 );
+		$this->repository->create( 10, 20.0 );
+		$this->repository->create( -5, 10.0 );
+
+		$this->assertEquals( 15.0, $this->counter->calculateCostPrice( -10 ) );
+		$this->assertEquals( 20.0, $this->counter->calculateCostPrice( -5 ) );
 	}
 
 	public function test_can_calculate_total_stock_count() {
-		$inventoryCounter = new Counter();
-		$this->repository->seed();
+		$this->repository->create( 10, 10.0 );
+		$this->repository->create( 20, 8.0 );
+		$this->repository->create( -20, null );
+		$this->repository->create( -5, null );
 
-		$this->assertEquals( 20, $inventoryCounter->countTotalQuantity( $this->repository->get() ) );
+		$this->assertEquals( 20, $this->counter->countTotalQuantity( $this->repository->get() ) );
 
-		$this->repository->create(-15, null);
+		$this->repository->create( -15, null );
 
-		$this->assertEquals( 5, $inventoryCounter->countTotalQuantity( $this->repository->get() ) );
+		$this->assertEquals( 5, $this->counter->countTotalQuantity( $this->repository->get() ) );
 	}
 }

@@ -13,13 +13,6 @@ class TransactionRepository
 		$this->transactions = new Collection();
 	}
 
-	public function seed() {
-		$this->create( 10, 10.0 ); // Purchase
-		$this->create( 20, 8.0 ); // Purchase
-		$this->create( -20, null ); // Sale
-		$this->create( -5, null ); // Sale
-	}
-
 	public function get() {
 		return $this->transactions;
 	}

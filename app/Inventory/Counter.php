@@ -11,6 +11,6 @@ class Counter
 
 	public function calculateCostPrice( $quantity = -10 ) {
 		// todo return an double representing the cost price for $quantity.
-		return 1.0;
+		return 0.0;
 	}
 }
