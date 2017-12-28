@@ -3,8 +3,6 @@
 namespace App\Inventory;
 
 use App\Repositories\TransactionRepository;
-use App\Transaction;
-use Illuminate\Support\Collection;
 
 class Counter
 {
