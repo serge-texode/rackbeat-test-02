@@ -14,4 +14,8 @@ class Transaction extends Model
 
 		// todo set cost_price on model "creating" event, if quantity is positive
 	}
+
+	public function calculateCostPrice() {
+		// todo create this method, and use it to set the cost_price
+	}
 }
