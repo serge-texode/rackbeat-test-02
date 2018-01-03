@@ -50,4 +50,29 @@ class InventoryTest extends TestCase
 
 		$this->assertEquals( 5, $this->counter->countTotalQuantity( $this->repository->get() ) );
 	}
+
+    public function test_can_calculate_cost_price_to_assert_calculation_algorithm() {
+
+        $this->repository->create( 5, 10.0 );
+        $this->repository->create( 10, 20.0);
+        $this->repository->create( 0, 100 );
+
+        $this->assertEquals( 16.67, $this->counter->calculateCostPrice( -15 ) );
+    }
+
+    public function test_calculate_cost_price_input_positive_value_exception() {
+
+        $this->repository->create( 5, 10.0 );
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->counter->calculateCostPrice( 10 );
+    }
+
+    public function test_calculate_cost_price_input_value_out_of_bound_exception() {
+
+        $this->repository->create( 5, 10.0 );
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->counter->calculateCostPrice( -100 );
+    }
 }
