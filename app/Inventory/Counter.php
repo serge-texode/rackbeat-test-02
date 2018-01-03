@@ -28,50 +28,58 @@ class Counter
             throw new \InvalidArgumentException(sprintf('Quantity %s should be less or equals than %s', $quantity, $totalQuantity));
         }
 
-        $positiveTransactions = $this->repository->getAllPositiveTransactions();
-        $negativeTransactionsQuantity = $this->repository->getAllNegativeTransactionsCount();
+        // Process every positive transaction in chronology order
+        $allPositiveTransactions = $this->repository->getAllPositiveTransactions();
+        // Get total items quantity (sum) from all negative transactions
+        $totalNegativeTransactionsUnitQuantity = $this->repository->getTotalNegativeTransactionsUnitQuantity();
+        // Process all items from negative transactions until they are finished
+        $areAllNegativeTransactionsAccounted = $totalNegativeTransactionsUnitQuantity > 0;
 
-        $totalQuantity = 0;
-        $totalCostPrice = 0;
+        $totalQuantity = $totalCostPrice = 0;
 
-        $calculatePreviousNegativeTransactions = $negativeTransactionsQuantity > 0;
+        foreach ($allPositiveTransactions as $positiveTransaction) {
 
-        foreach ($positiveTransactions as $positiveTransaction) {
+            $currQuantity = $positiveTransaction->getAttribute('quantity');
+            $currUnitCostPrice = $positiveTransaction->getAttribute('unit_cost_price');
 
-            $positiveTransactionQuantity = $positiveTransaction->getAttribute('quantity');
-            $positiveTransactionCostPrice = $positiveTransaction->getAttribute('unit_cost_price');
+            // Either account older negative transactions ...
+            if ($areAllNegativeTransactionsAccounted) {
+                $totalNegativeTransactionsUnitQuantity -= $currQuantity;
 
-            if ($calculatePreviousNegativeTransactions) {
-                $negativeTransactionsQuantity -= $positiveTransactionQuantity;
-
-                if ($negativeTransactionsQuantity > 0) {
+                if ($totalNegativeTransactionsUnitQuantity > 0) {
+                    // Will account negative transactions further
                     continue;
                 }
 
-                $quantityRemainder = abs($negativeTransactionsQuantity);
+                // We're done with negative transactions.
+                $areAllNegativeTransactionsAccounted = false;
+
+                // Is current transaction still not empty?
+                $quantityRemainder = abs($totalNegativeTransactionsUnitQuantity);
 
                 if ($quantity <= $quantityRemainder) {
-                    $totalQuantity = $positiveTransactionQuantity;
-                    $totalCostPrice = $positiveTransactionCostPrice * $totalQuantity;
+                    // Finish calculation with current transaction
+                    $totalQuantity = $currQuantity;
+                    $totalCostPrice = $currUnitCostPrice * $totalQuantity;
                     break;
                 }
 
+                // Account current transaction and go to further calculations
                 $totalQuantity = $quantityRemainder;
-                $totalCostPrice = $quantityRemainder * $positiveTransactionCostPrice;
+                $totalCostPrice = $quantityRemainder * $currUnitCostPrice;
 
-                $calculatePreviousNegativeTransactions = false;
-                continue;
-            }
+            } else { // .. or calculate current unit cost price
 
-            $totalQuantity += $positiveTransactionQuantity;
+                $totalQuantity += $currQuantity;
 
-            if ($quantity > $totalQuantity) {
-                $totalCostPrice += $positiveTransactionQuantity * $positiveTransactionCostPrice;
-            } else {
-                $quantityRemainder = $totalQuantity - $quantity;
-                $totalQuantity -= $quantityRemainder;
-                $totalCostPrice += ($positiveTransactionQuantity - $quantityRemainder) * $positiveTransactionCostPrice;
-                break;
+                if ($quantity > $totalQuantity) {
+                    $totalCostPrice += $currQuantity * $currUnitCostPrice;
+                } else {
+                    $quantityRemainder = $totalQuantity - $quantity;
+                    $totalQuantity -= $quantityRemainder;
+                    $totalCostPrice += ($currQuantity - $quantityRemainder) * $currUnitCostPrice;
+                    break;
+                }
             }
         }
 

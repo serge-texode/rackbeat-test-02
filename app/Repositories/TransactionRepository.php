@@ -43,7 +43,7 @@ class TransactionRepository
         return $this->transactions->where('quantity', '>', 0);
     }
 
-    public function getAllNegativeTransactionsCount(): int {
+    public function getTotalNegativeTransactionsUnitQuantity(): int {
         return $this->transactions
             ->where('quantity', '<', 0)
             ->sum(function (Transaction $item) {
